@@ -4,15 +4,15 @@ FILEDIR=$(pwd)
 CONDA_BASE=$(conda info --base)
 source "$CONDA_BASE/etc/profile.d/conda.sh"
 
-conda info --envs | grep -w "myenv" > /dev/null
+conda info --envs | grep -w "phishpedia-env" > /dev/null
 
 if [ $? -eq 0 ]; then
-   echo "Activating Conda environment myenv"
-   conda activate myenv
+   echo "Activating Conda environment phishpedia-env"
+   conda activate phishpedia-env
 else
    echo "Creating and activating new Conda environment $ENV_NAME with Python 3.8"
-   conda create -n myenv python=3.8
-   conda activate myenv
+   conda create -n phishpedia-env python=3.8
+   conda activate phishpedia-env
 fi
 
 pip install -r requirements.txt
@@ -41,10 +41,10 @@ pip install -v .
 package_location=$(pip show phishpedia | grep Location | awk '{print $2}')
 
 if [ -z "$package_location" ]; then
-  echo "Package Phishpedia not found in the Conda environment myenv."
+  echo "Package Phishpedia not found in the Conda environment phishpedia-env."
   exit 1
 else
-  echo "Going to the directory of package Phishpedia in Conda environment myenv."
+  echo "Going to the directory of package Phishpedia in Conda environment phishpedia-env."
   cd "$package_location/phishpedia/src/detectron2_pedia/output/rcnn_2" || exit
   pip install gdown
   gdown --id 1tE2Mu5WC8uqCxei3XqAd7AWaP5JTmVWH
