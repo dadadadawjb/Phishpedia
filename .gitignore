@@ -1,3 +1,7 @@
 *.zip
 *.pkl
 *.pth*
+build/
+*.egg-info/
+__pycache__/
+phishpedia/configs.yaml
