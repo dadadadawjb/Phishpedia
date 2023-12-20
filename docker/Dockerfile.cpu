@@ -1,0 +1,26 @@
+FROM python:3.8-slim
+
+WORKDIR /phishpedia
+
+COPY . .
+
+RUN apt update && apt install unzip -y
+RUN pip install gdown
+RUN cd ./phishpedia/src/detectron2_pedia/output/rcnn_2/ && \
+  gdown --id 1tE2Mu5WC8uqCxei3XqAd7AWaP5JTmVWH
+
+RUN cd ./phishpedia/src/siamese_pedia/ \
+  && gdown --id 1H0Q_DbdKPLFcZee8I14K62qV7TTy7xvS \
+  && gdown --id 1fr5ZxBKyDiNZ_1B6rRAfZbAHBBoUjZ7I \
+  && gdown --id 1qSdkSSoCYUkZMKs44Rup_1DPBxHnEKl1
+
+RUN pip install -e .
+RUN pip install -r requirements.txt
+
+RUN pip install torch==1.9.0+cpu torchvision==0.10.0+cpu torchaudio==0.9.0 -f "https://mirror.sjtu.edu.cn/pytorch-wheels/torch_stable.html"
+RUN python -m pip install detectron2 -f "https://dl.fbaipublicfiles.com/detectron2/wheels/cpu/torch1.9/index.html"
+# fix opencv in docker
+RUN pip uninstall -y opencv-python && pip install opencv-python-headless==4.8.1.78
+
+RUN sed "s|CONDA_ENV_PATH_PLACEHOLDER|/phishpedia/phishpedia|g" "/phishpedia/phishpedia/configs_template.yaml" > "/phishpedia/phishpedia/configs.yaml"
+RUN echo "MODEL:\n  DEVICE: cpu" >> /phishpedia/phishpedia/src/detectron2_pedia/configs/faster_rcnn.yaml
