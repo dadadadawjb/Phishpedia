@@ -10,9 +10,6 @@ os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
 
 if __name__ == '__main__':
-
-    ELE_MODEL, SIAMESE_THRE, SIAMESE_MODEL, LOGO_FEATS, LOGO_FILES, DOMAIN_MAP_PATH = load_config(None)
-
     date = datetime.today().strftime('%Y-%m-%d')
     print('Today is:', date)
     parser = argparse.ArgumentParser()
@@ -21,9 +18,12 @@ if __name__ == '__main__':
                         help='Input folder path to parse')
     parser.add_argument('-r', "--results", default=date + '_pedia.txt',
                         help='Input results file name')
+    parser.add_argument('-c', "--config", default='phishpedia/configs.yaml',
+                        help='Input configuration file name')
 
     args = parser.parse_args()
     print(args)
+
+    ELE_MODEL, SIAMESE_THRE, SIAMESE_MODEL, LOGO_FEATS, LOGO_FILES, DOMAIN_MAP_PATH = load_config(args.config)
     runit(args.folder, args.results, ELE_MODEL, SIAMESE_THRE, SIAMESE_MODEL, LOGO_FEATS, LOGO_FILES, DOMAIN_MAP_PATH)
     print('Process finish')
-
