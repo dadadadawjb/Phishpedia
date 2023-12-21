@@ -7,8 +7,11 @@ from torch import nn
 import torch.nn.functional as F
 import torch
 from collections import OrderedDict
-from phishpedia.src.siamese_pedia.utils import brand_converter, resolution_alignment
+import pickle
 import matplotlib.pyplot as plt
+import tldextract
+
+from .utils import brand_converter, resolution_alignment
 
 
 def l2_norm(x):
@@ -149,6 +152,58 @@ def siamese_inference(model, domain_map, logo_feat_list, file_name_list, shot_pa
 
     return None, None, top3_simlist[0]
 
+
+def phishpedia_classifier_logo(logo_boxes,
+                          domain_map_path: str,
+                          model, logo_feat_list, file_name_list, shot_path: str,
+                          url: str,
+                          ts: float):
+    '''
+    Run siamese
+    :param logo_boxes: torch.Tensor/np.ndarray Nx4 logo box coords
+    :param domain_map_path: path to domain map dict
+    :param model: siamese model
+    :param logo_feat_list: targetlist embeddings
+    :param file_name_list: targetlist paths
+    :param shot_path: path to image
+    :param url: url
+    :param ts: siamese threshold
+    :return pred_target
+    :return coord: coordinate for matched logo
+    '''
+    # targetlist domain list
+    with open(domain_map_path, 'rb') as handle:
+        domain_map = pickle.load(handle)
+
+    print('number of logo boxes:', len(logo_boxes))
+    matched_target, matched_domain, matched_coord, this_conf = None, None, None, None
+
+    if len(logo_boxes) > 0:
+        # siamese prediction for logo box
+        for i, coord in enumerate(logo_boxes):
+            min_x, min_y, max_x, max_y = coord
+            bbox = [float(min_x), float(min_y), float(max_x), float(max_y)]
+            matched_target, matched_domain, this_conf = siamese_inference(model, domain_map,
+                                                                    logo_feat_list, file_name_list,
+                                                                    shot_path, bbox, t_s=ts, grayscale=False)
+            # print(target_this, domain_this, this_conf)
+            # domain matcher to avoid FP
+            if matched_target is not None:
+                matched_coord = coord
+                # if tldextract.extract(url).domain + '.' + tldextract.extract(url).suffix not in matched_domain:
+                if tldextract.extract(url).domain not in matched_domain:
+                    # avoid fp due to godaddy domain parking, ignore webmail provider (ambiguous)
+                    if matched_target == 'GoDaddy' or matched_target == "Webmail Provider" or matched_target == "Government of the United Kingdom":
+                        matched_target = None  # ignore the prediction
+                        matched_domain = None  # ignore the prediction
+                else:  # benign, real target
+                    matched_target = None  # ignore the prediction
+                    matched_domain = None  # ignore the prediction
+                break  # break if target is matched
+            if i >= 2:  # only look at top-2 logo
+                break
+
+    return brand_converter(matched_target), matched_coord, this_conf
 
 
 

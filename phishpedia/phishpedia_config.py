@@ -1,14 +1,16 @@
 # Global configuration
-from phishpedia.src.siamese import *
-from phishpedia.src.detectron2_pedia.inference import *
-import phishpedia
+import os
 import subprocess
 from typing import Union
 import yaml
 
+from .src.detectron2_pedia.config import config_detectron2
+from .src.siamese_pedia.config import config_siamese
+
 
 def load_config(cfg_path: Union[str, None]):
 
+    # load config
     if cfg_path is None:
         with open(os.path.join(os.path.dirname(__file__), 'configs.yaml')) as file:
             configs = yaml.load(file, Loader=yaml.FullLoader)
@@ -16,12 +18,13 @@ def load_config(cfg_path: Union[str, None]):
         with open(cfg_path) as file:
             configs = yaml.load(file, Loader=yaml.FullLoader)
 
+    # config detectron2
     ELE_CFG_PATH = configs['ELE_MODEL']['CFG_PATH'].replace('/', os.sep)
     ELE_WEIGHTS_PATH = configs['ELE_MODEL']['WEIGHTS_PATH'].replace('/', os.sep)
     ELE_CONFIG_THRE = configs['ELE_MODEL']['DETECT_THRE']
-    ELE_MODEL = config_rcnn(ELE_CFG_PATH, ELE_WEIGHTS_PATH, conf_threshold=ELE_CONFIG_THRE)
+    ELE_MODEL = config_detectron2(ELE_CFG_PATH, ELE_WEIGHTS_PATH, conf_threshold=ELE_CONFIG_THRE)
 
-    # siamese model
+    # config siamese
     SIAMESE_THRE = configs['SIAMESE_MODEL']['MATCH_THRE']
 
     print('Load protected logo list')
@@ -35,7 +38,7 @@ def load_config(cfg_path: Union[str, None]):
         os.makedirs(full_targetlist_folder_dir, exist_ok=True)
         subprocess.run(f'unzip -o "{targetlist_zip_path}" -d "{full_targetlist_folder_dir}"', shell=True)
 
-    SIAMESE_MODEL, LOGO_FEATS, LOGO_FILES = phishpedia_config(
+    SIAMESE_MODEL, LOGO_FEATS, LOGO_FILES = config_siamese(
                                                 num_classes=configs['SIAMESE_MODEL']['NUM_CLASSES'],
                                                 weights_path=configs['SIAMESE_MODEL']['WEIGHTS_PATH'].replace('/', os.sep),
                                                 targetlist_path=full_targetlist_folder_dir.replace('/', os.sep))

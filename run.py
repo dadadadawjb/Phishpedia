@@ -1,5 +1,3 @@
-
-from phishpedia.phishpedia_main import *
 import time
 import datetime
 import sys
@@ -7,6 +5,9 @@ from datetime import datetime, timedelta, time
 import argparse
 import os
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
+
+from phishpedia.phishpedia_config import load_config
+from phishpedia.phishpedia_main import runit
 
 
 if __name__ == '__main__':

@@ -1,10 +1,13 @@
-from .phishpedia_config import *
 import os
+from tqdm import tqdm
 import argparse
 import time
-from .src.util.chrome import *
-# import os
+import cv2
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
+
+from .src.detectron2_pedia.inference import pred_rcnn, vis
+from .src.siamese_pedia.inference import phishpedia_classifier_logo
+from .src.virustotal_pedia.request import vt_scan
 
 #####################################################################################################################
 # ** Step 1: Enter Layout detector, get predicted elements
@@ -70,8 +73,23 @@ def test(url, screenshot_path, ELE_MODEL, SIAMESE_THRE, SIAMESE_MODEL, LOGO_FEAT
         cv2.putText(plotvis, "Target: {} with confidence {:.4f}".format(pred_target, siamese_conf),
                     (int(matched_coord[0] + 20), int(matched_coord[1] + 20)),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 0), 2)
+    
+        # FIXME: call VTScan only when phishpedia report it as phishing
+        vt_result = "None"
+        try:
+            if vt_scan(url) is not None:
+                positive, total = vt_scan(url)
+                print("Positive VT scan!")
+                vt_result = str(positive) + "/" + str(total)
+            else:
+                print("Negative VT scan!")
+                vt_result = "None"
 
-    return phish_category, pred_target, plotvis, siamese_conf, pred_boxes
+        except Exception as e:
+            print('VTScan is not working...')
+            vt_result = "error"
+
+    return phish_category, pred_target, plotvis, siamese_conf, pred_boxes, vt_result
 
 
 def runit(folder, results, ELE_MODEL, SIAMESE_THRE, SIAMESE_MODEL, LOGO_FEATS, LOGO_FILES, DOMAIN_MAP_PATH):
@@ -107,29 +125,13 @@ def runit(folder, results, ELE_MODEL, SIAMESE_THRE, SIAMESE_MODEL, LOGO_FEATS, L
         except:
             url = 'https://www.' + item
 
-        phish_category, phish_target, plotvis, siamese_conf, pred_boxes = test(url=url, screenshot_path=screenshot_path,
+        phish_category, phish_target, plotvis, siamese_conf, pred_boxes, vt_result = test(url=url, screenshot_path=screenshot_path,
                                                                                ELE_MODEL=ELE_MODEL,
                                                                                SIAMESE_THRE=SIAMESE_THRE,
                                                                                SIAMESE_MODEL=SIAMESE_MODEL,
                                                                                LOGO_FEATS=LOGO_FEATS,
                                                                                LOGO_FILES=LOGO_FILES,
                                                                                DOMAIN_MAP_PATH=DOMAIN_MAP_PATH)
-
-        # FIXME: call VTScan only when phishpedia report it as phishing
-        vt_result = "None"
-        if phish_target is not None:
-            try:
-                if vt_scan(url) is not None:
-                    positive, total = vt_scan(url)
-                    print("Positive VT scan!")
-                    vt_result = str(positive) + "/" + str(total)
-                else:
-                    print("Negative VT scan!")
-                    vt_result = "None"
-
-            except Exception as e:
-                print('VTScan is not working...')
-                vt_result = "error"
 
         # write results as well as predicted images
         try:
