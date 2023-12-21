@@ -3,22 +3,12 @@ import numpy as np
 from PIL import Image, ImageOps
 from torchvision import transforms
 import matplotlib.pyplot as plt
-from torch import nn
-import torch.nn.functional as F
 import torch
-from collections import OrderedDict
 import pickle
 import matplotlib.pyplot as plt
 import tldextract
 
-from .utils import brand_converter, resolution_alignment
-
-
-def l2_norm(x):
-    '''L2 Normalization'''
-    if len(x.shape):
-        x = x.reshape((x.shape[0], -1))
-    return F.normalize(x, p=2, dim=1)
+from .utils import l2_norm, brand_converter, resolution_alignment
 
 
 def pred_siamese(img, model, imshow=False, title=None, grayscale=False):

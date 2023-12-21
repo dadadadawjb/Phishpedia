@@ -1,5 +1,12 @@
-from PIL import Image
+import torch.nn.functional as F
 import math
+
+
+def l2_norm(x):
+    '''L2 Normalization'''
+    if len(x.shape):
+        x = x.reshape((x.shape[0], -1))
+    return F.normalize(x, p=2, dim=1)
 
 def resolution_alignment(img1, img2):
     '''
