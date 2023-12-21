@@ -4,4 +4,5 @@
 build/
 *.egg-info/
 __pycache__/
-phishpedia/configs.yaml
+
+phishpedia/datasets/expand_targetlist

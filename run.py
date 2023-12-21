@@ -19,7 +19,7 @@ if __name__ == '__main__':
                         help='Input folder path to parse')
     parser.add_argument('-r', "--results", default=date + '_pedia.txt',
                         help='Input results file name')
-    parser.add_argument('-c', "--config", default='phishpedia/configs.yaml',
+    parser.add_argument('-c', "--config", default='phishpedia/configs/configs.yaml',
                         help='Input configuration file name')
 
     args = parser.parse_args()
