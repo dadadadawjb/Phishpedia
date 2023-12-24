@@ -1,12 +1,14 @@
-from .FGSM import fgsm
-from .JSMA import jsma
-from .DeepFool import deepfool
-from .CWL2 import cw
 import os
+
 import numpy as np
 import torch
 import torch.nn as nn
 from tqdm import tqdm
+
+from CWL2 import cw
+from DeepFool import deepfool
+from FGSM import fgsm
+from JSMA import jsma
 
 
 class adversarial_attack():
@@ -82,7 +84,8 @@ class adversarial_attack():
                 perturbed_data = cw(self.model, self.device, data, label, target_class)
                 
             else:
-                print('Attack method is not supported， please choose your attack from [fgsm|stepll|jsma|deepfool|cw]')
+                print('Attack method is not supported, \
+                    please choose your attack from [fgsm|stepll|jsma|deepfool|cw]')
                 
                 
             # Re-classify the perturbed image
@@ -120,4 +123,3 @@ class adversarial_attack():
 
         # Return the accuracy and an adversarial example
         return final_acc, adv_examples
-            

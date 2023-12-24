@@ -1,13 +1,16 @@
+import os
+import pickle
+from collections import OrderedDict
+
+import numpy as np
+import tldextract
+import torch
+from tqdm import tqdm
+
+from .siamese_pedia.inference import pred_siamese, siamese_inference
 from .siamese_pedia.siamese_retrain.bit_pytorch.models import KNOWN_MODELS
 from .siamese_pedia.utils import brand_converter
-from .siamese_pedia.inference import siamese_inference, pred_siamese
-import torch
-import os
-import numpy as np
-from collections import OrderedDict
-import pickle
-from tqdm import tqdm
-import tldextract
+
 
 def phishpedia_config(num_classes:int, weights_path:str, targetlist_path:str, grayscale=False):
     '''

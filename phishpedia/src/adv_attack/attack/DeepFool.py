@@ -1,11 +1,13 @@
+import copy
+
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-from torch.autograd.gradcheck import zero_gradients
 from torch.autograd import Variable
-import numpy as np
-import copy
+from torch.autograd.gradcheck import zero_gradients
+
 
 def deepfool(model, num_classes, image, label, I, overshoot=0.02, max_iter=100, clip_min=-1.0, clip_max=1.0):
     '''
@@ -66,9 +68,9 @@ def deepfool(model, num_classes, image, label, I, overshoot=0.02, max_iter=100, 
         # compute r_i and r_tot
         # Added 1e-4 for numerical stability
         if np.linalg.norm(w) == 0.0:
-            r_i = (pert+1e-4) * w
+            r_i = (pert + 1e-4) * w
         else:
-            r_i =  (pert+1e-4) * w / np.linalg.norm(w)
+            r_i = (pert + 1e-4) * w / np.linalg.norm(w)
         r_tot = np.float32(r_tot + r_i)
 
         pert_image = image + (1+overshoot)*torch.from_numpy(r_tot).cuda()

@@ -1,9 +1,10 @@
 import os
-from phishpedia.src.detectron2_pedia import detectron2_1
-from detectron2.config import get_cfg
-from detectron2.engine import DefaultPredictor
+
 import cv2
 import numpy as np
+from detectron2.config import get_cfg
+from detectron2.engine import DefaultPredictor
+from phishpedia.src.detectron2_pedia import detectron2_1
 
 
 def pred_rcnn(im, predictor):

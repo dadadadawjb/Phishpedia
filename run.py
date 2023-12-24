@@ -1,11 +1,13 @@
 
-from phishpedia.phishpedia_main import *
-import time
-import datetime
-import sys
-from datetime import datetime, timedelta, time
 import argparse
+import datetime
 import os
+import sys
+import time
+from datetime import datetime, time, timedelta
+
+from phishpedia.phishpedia_main import *
+
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
 

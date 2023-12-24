@@ -1,13 +1,16 @@
 
-import torch
-import numpy as np
-import phishpedia.src.siamese_pedia.siamese_retrain.bit_pytorch.models as models
-from phishpedia.src.siamese_pedia.siamese_retrain.bit_pytorch.dataloader import GetLoader
-import torch.nn.functional as F
 import os
+
 import cv2
 import matplotlib.pyplot as plt
+import numpy as np
+import phishpedia.src.siamese_pedia.siamese_retrain.bit_pytorch.models as models
+import torch
+import torch.nn.functional as F
 import torchvision as tv
+from phishpedia.src.siamese_pedia.siamese_retrain.bit_pytorch.dataloader import \
+    GetLoader
+
 
 def evaluate(model, loader):
 

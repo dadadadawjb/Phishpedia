@@ -1,8 +1,10 @@
-from .phishpedia_config import *
-import os
 import argparse
+import os
 import time
+
+from .phishpedia_config import *
 from .src.util.chrome import *
+
 # import os
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 

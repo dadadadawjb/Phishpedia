@@ -1,11 +1,11 @@
-import os
-
-from tqdm import tqdm
-import time
-from phishpedia.src.siamese import *
-from phishpedia.src.detectron2_pedia.inference import *
 import argparse
 import errno
+import os
+import time
+
+from phishpedia.src.detectron2_pedia.inference import *
+from phishpedia.src.siamese import *
+from tqdm import tqdm
 
 
 def phishpedia_eval(data_dir, mode, siamese_ts, write_txt):

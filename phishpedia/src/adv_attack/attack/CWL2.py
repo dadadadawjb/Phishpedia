@@ -19,18 +19,17 @@ def cw(model, device, image, label, target_cls, c=1, kappa=0, max_iter=1000, lea
     :return: perturbed image
     '''
     
-    # Get loss2
-    def f(x) :
-        
+    def loss_function(x):
         output = model(x)
         one_hot_label = torch.eye(len(output[0]))[label].to(device)
         one_hot_target = torch.eye(len(output[0]))[target_cls].to(device)
 
-        # confidence for the original predicted class and target class
-        i, j = torch.masked_select(output, one_hot_label.bool()), torch.masked_select(output, one_hot_target.bool())
+        # Confidence for the original predicted class and target class
+        confidence_label, confidence_target = torch.masked_select(output, one_hot_label.bool()), torch.masked_select(output, one_hot_target.bool())
         
-        # optimize for making the other class most likely 
-        return torch.clamp(i-j, min=-kappa)
+        # Optimize for making the other class most likely 
+        return torch.clamp(confidence_label - confidence_target, min=-margin)
+
 
     
     # initialize w : the noise
@@ -55,13 +54,12 @@ def cw(model, device, image, label, target_cls, c=1, kappa=0, max_iter=1000, lea
         with torch.no_grad():
             pred_new = model(a)
             
-        # Stop when ... 
-        # successfully flip the label
+        # Stop when successfully flipping the label
         if torch.argmax(pred_new, dim=1).item() != label: 
             break
 
         if verbose > 0:
-            print('- Learning Progress : %2.2f %% ' %((step+1)/max_iter*100), end='\r')
+            print('- Learning Progress: %2.2f %% ' % ((step + 1) / max_iter * 100), end='\r')
             
     # w is the noise added to the original image, restricted to be [-1, 1]
     attack_images = image + torch.tanh(w) 

@@ -1,5 +1,6 @@
-from setuptools import setup, find_packages
 from functools import reduce
+
+from setuptools import find_packages, setup
 
 version="0.0.0"
 

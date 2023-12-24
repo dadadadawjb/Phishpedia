@@ -1,8 +1,10 @@
+import os
+import pickle
+
+import numpy as np
 import torch.utils.data as data
 from PIL import Image, ImageOps
-import pickle
-import numpy as np
-import os
+
 
 class GetLoader(data.Dataset):
     def __init__(self, data_root, data_list, label_dict, transform=None, grayscale=False):

@@ -1,11 +1,11 @@
+import copy
+
+import numpy as np
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 import torch.optim as optim
-from torch.autograd.gradcheck import zero_gradients
 from torch.autograd import Variable
-import numpy as np
-import copy
+
 
 def compute_jacobian(model, num_classes, inputs, output):
     '''
@@ -51,7 +51,6 @@ def saliency_map(jacobian, search_space, target_index):
     # get the maximum index
     row_idx, col_idx = (saliency_map == torch.max(saliency_map)).nonzero()[0]
     return row_idx, col_idx
-
 
 def jsma(model, num_classes, image, target, max_iter=100, clip_min=-1.0, clip_max=1.0):
     '''
@@ -101,5 +100,3 @@ def jsma(model, num_classes, image, target, max_iter=100, clip_min=-1.0, clip_ma
             break
 
     return x.data
-
-

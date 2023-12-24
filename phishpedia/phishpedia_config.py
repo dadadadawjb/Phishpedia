@@ -1,10 +1,12 @@
 # Global configuration
-from phishpedia.src.siamese import *
-from phishpedia.src.detectron2_pedia.inference import *
-import phishpedia
 import subprocess
 from typing import Union
+
 import yaml
+
+import phishpedia
+from phishpedia.src.detectron2_pedia.inference import *
+from phishpedia.src.siamese import *
 
 
 def load_config(cfg_path: Union[str, None]):
