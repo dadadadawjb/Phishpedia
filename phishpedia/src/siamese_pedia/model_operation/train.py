@@ -33,7 +33,7 @@ from phishpedia.src.siamese_pedia.siamese_retrain.bit_pytorch.dataloader import 
 import os
 os.environ["CUDA_VISIBLE_DEVICES"]="0, 1"
 
-
+#这段代码的主要作用是使用 BiT 模型在指定的下游数据集上进行微调
 def topk(output, target, ks=(1,)):
     """Returns one boolean vector for each k, whether the target is within the output's top-k."""
     _, pred = output.topk(max(ks), 1, True, True)

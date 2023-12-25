@@ -21,7 +21,7 @@ import signal
 import time
 
 import numpy as np
-
+##工具函数提供了一些有用的功能，例如处理中断、测量代码块的执行时间、进行简单的性能分析，以及创建和加载内存映射的数据文件。
 
 class Uninterrupt:
     """Context manager to gracefully handle interrupts.

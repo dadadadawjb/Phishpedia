@@ -24,7 +24,7 @@ import sys
 
 import torch
 import torchvision as tv
-
+##训练模型的一种方法
 
 class AddIndexIter(torch.utils.data.dataloader._SingleProcessDataLoaderIter):
     def _next_data(self):
@@ -41,7 +41,7 @@ def find_indices_loader(loader, n_shots, n_classes):
     for ibatch, (indices, (images, labels)) in enumerate(AddIndexIter(loader)):
         for idx, lbl in zip(indices, labels):
             per_label_indices[lbl.item()].append(idx)
-    
+
             findings = sum(map(len, per_label_indices.values()))
             if findings == n_shots * n_classes:
                 return per_label_indices

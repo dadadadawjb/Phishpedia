@@ -9,6 +9,8 @@ import cv2
 import matplotlib.pyplot as plt
 import torchvision as tv
 
+#这段代码包含了一些用于模型评估和可视化的功能。主要包括以下几个部分：
+
 def evaluate(model, loader):
 
     model.eval()

@@ -4,9 +4,11 @@ import pickle
 import numpy as np
 import os
 
+#用于加载数据的 PyTorch Dataset 类，主要用于加载图像数据和相应的标签。
+
 class GetLoader(data.Dataset):
     def __init__(self, data_root, data_list, label_dict, transform=None, grayscale=False):
-        
+
         self.transform = transform
         self.data_root = data_root
         self.grayscale = grayscale

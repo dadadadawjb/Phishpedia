@@ -10,7 +10,6 @@ import tldextract
 
 from .utils import l2_norm, brand_converter, resolution_alignment
 
-
 def pred_siamese(img, model, imshow=False, title=None, grayscale=False):
     '''
     Inference for a single image
