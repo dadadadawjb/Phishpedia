@@ -33,3 +33,4 @@ if __name__ == '__main__':
     
     evaluate(args.gt_json, args.pred_json)
 
+#段代码用于评估目标检测模型在给定数据集上的性能，输出包括精确度、召回率等指标的总结信息。

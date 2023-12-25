@@ -22,6 +22,7 @@ benign_test_coco_path = data_dir / "coco_test.json"
 register_coco_instances("benign_train", {}, benign_train_coco_path, benign_img_dir)
 register_coco_instances("benign_test", {}, benign_test_coco_path, benign_img_dir)
 
+#该代码块主要是用于数据集的注册、数据加载和数据处理的工具类
 
 def build_transform_gen(cfg, is_train):
     """

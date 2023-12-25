@@ -20,3 +20,5 @@ def config_detectron2(cfg_path, weights_path, conf_threshold):
     # Initialize model
     predictor = DefaultPredictor(cfg)
     return predictor
+
+#这段代码是用于配置和初始化 Detectron2 模型的功能
