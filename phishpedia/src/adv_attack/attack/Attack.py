@@ -30,7 +30,7 @@ class adversarial_attack():
         self.device = device
         self.num_classes = num_classes
         self.save_data = save_data
-        
+
     def batch_attack(self):
         '''
         Run attack on a batch of data
@@ -53,7 +53,8 @@ class adversarial_attack():
             self.model.zero_grad()
             init_pred = output.max(1, keepdim=True)[1]  # get the index of the max log-probability
 
-            if init_pred.item() != label.item():  # initially was incorrect --> no need to generate adversary
+            if init_pred.item() != label.item():  
+                # initially was incorrect --> no need to generate adversary
                 total += 1
                 print(ct)
                 continue
