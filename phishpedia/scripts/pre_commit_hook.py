@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 import subprocess
 import sys  # 引入 sys 模块
 
@@ -12,7 +12,7 @@ def get_folders_for_files(files):
 
     for file_path in files:
         # Assuming file paths are relative to the project root
-        folders.add(file_path.split("/")[0])
+        folders.add(file_path.split("\")[0])
 
     return folders
 
