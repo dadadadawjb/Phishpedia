@@ -1,0 +1,6 @@
+{
+  "hooks": {
+    "pre-commit": "python3 scripts/pre_commit_hook.py"
+  }
+}
+
