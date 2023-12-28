@@ -54,26 +54,26 @@ def print_commit_info():
     modified_files = get_modified_files()
 
     if modified_files:
-        print("Modified files:")
+        print("Modified files:", file=sys.stderr)
         for file_path in modified_files:
-            print(f"- {file_path}")
+            print(f"- {file_path}", file=sys.stderr)
 
         folders = get_folders_for_files(modified_files)
 
-        print("\nFolders these files belong to:")
+        print("\nFolders these files belong to:", file=sys.stderr)
         for folder in folders:
-            print(f"- {folder}")
+            print(f"- {folder}", file=sys.stderr)
 
         # 生成高层次的 commit message 建议
         commit_suggestions = get_commit_suggestions(modified_files)
         if commit_suggestions:
-            print("\nCommit message suggestions:")
+            print("\nCommit message suggestions:", file=sys.stderr)
             for suggestion in commit_suggestions:
-                print(f"- {suggestion}")
+                print(f"- {suggestion}", file=sys.stderr)
         else:
-            print("\nNo high-level commit message suggestions.")
+            print("No high-level commit message suggestions.", file=sys.stderr)
     else:
-        print("No modified files.")
+        print("No modified files.", file=sys.stderr)
 
 if __name__ == "__main__":
     print_commit_info()
