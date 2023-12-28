@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import subprocess
 import sys
 
@@ -33,7 +34,7 @@ def get_commit_suggestions(modified_files):
         keywords = []
         if '/' in file_path:
             keywords = file_path.split('/')[0].split('_')
-        
+
         # 根据关键字确定修改类型
         modification_type = 'update' if keywords else 'add'
 
@@ -49,33 +50,30 @@ def get_commit_suggestions(modified_files):
 
     return commit_message
 
-def main():
+def print_commit_info():
     modified_files = get_modified_files()
 
     if modified_files:
-        print("Modified files:", file=sys.stderr)
+        print("Modified files:")
         for file_path in modified_files:
-            print(f"- {file_path}", file=sys.stderr)
+            print(f"- {file_path}")
 
         folders = get_folders_for_files(modified_files)
 
-        print("\nFolders these files belong to:", file=sys.stderr)
+        print("\nFolders these files belong to:")
         for folder in folders:
-            print(f"- {folder}", file=sys.stderr)
+            print(f"- {folder}")
 
         # 生成高层次的 commit message 建议
         commit_suggestions = get_commit_suggestions(modified_files)
         if commit_suggestions:
-            print("\nCommit message suggestions:", file=sys.stderr)
+            print("\nCommit message suggestions:")
             for suggestion in commit_suggestions:
-                print(f"- {suggestion}", file=sys.stderr)
+                print(f"- {suggestion}")
         else:
-            print("No high-level commit message suggestions.", file=sys.stderr)
+            print("\nNo high-level commit message suggestions.")
     else:
-        print("No modified files.", file=sys.stderr)
+        print("No modified files.")
 
 if __name__ == "__main__":
-    main()
-
-
-
+    print_commit_info()
