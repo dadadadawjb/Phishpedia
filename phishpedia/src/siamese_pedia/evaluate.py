@@ -1,14 +1,14 @@
 
 import torch
 import numpy as np
-import phishpedia.src.siamese_pedia.siamese_retrain.bit_pytorch.models as models
-from phishpedia.src.siamese_pedia.siamese_retrain.bit_pytorch.dataloader import GetLoader
 import torch.nn.functional as F
 import os
 import cv2
 import matplotlib.pyplot as plt
 import torchvision as tv
 
+import siamese_retrain.bit_pytorch.models as models
+from siamese_retrain.bit_pytorch.dataloader import GetLoader
 #这段代码包含了一些用于模型评估和可视化的功能。主要包括以下几个部分：
 
 def evaluate(model, loader):
