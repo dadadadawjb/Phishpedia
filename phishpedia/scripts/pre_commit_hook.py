@@ -2,8 +2,11 @@
 import subprocess
 import sys
 
+import os
+
 def get_modified_files():
-    result = subprocess.run(["git", "diff", "--name-only", "--cached"], stdout=subprocess.PIPE, text=True)
+    root_dir = os.path.dirname(os.path.abspath(__file__))
+    result = subprocess.run(["git", "diff", "--name-only", "--cached"], stdout=subprocess.PIPE, text=True, cwd=root_dir)
     modified_files = result.stdout.strip().split('\n')
     return modified_files
 
