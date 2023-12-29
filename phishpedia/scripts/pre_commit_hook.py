@@ -4,8 +4,8 @@ import sys
 import os
 
 def get_modified_files():
-    root_dir = os.path.dirname(os.path.abspath(__file__))
-    result = subprocess.run(["git", "diff", "--name-only", "--cached"], stdout=subprocess.PIPE, text=True, cwd=root_dir)
+    root_dir = '.'
+    result = subprocess.run(["git", "diff", "--name-only"], stdout=subprocess.PIPE, text=True, cwd=root_dir)
     modified_files = result.stdout.strip().split('\n')
     return modified_files
 
@@ -14,41 +14,19 @@ def get_folders_for_files(files):
 
     for file_path in files:
         # Assuming file paths are relative to the project root
-        folders.add(file_path.split("/")[0])
+        # folders.add(file_path.split("/")[0])
+        folders.add(os.path.dirname(file_path).split("/")[-1])
 
     return folders
 
-def get_commit_suggestions(modified_files):
-    commit_keywords = {
-        'add': ['add', 'new'],
-        'update': ['update', 'modify'],
-        'delete': ['delete', 'remove']
-    }
-
-    file_modifications = {
-        'add': [],
-        'update': [],
-        'delete': []
-    }
-
-    for file_path in modified_files:
-        # 根据文件路径提取关键字
-        keywords = []
-        if '/' in file_path:
-            keywords = file_path.split('/')[0].split('_')
-
-        # 根据关键字确定修改类型
-        modification_type = 'update' if keywords else 'add'
-
-        # 将文件路径添加到相应修改类型的列表中
-        file_modifications[modification_type].append(file_path)
-
-    # 生成 commit message
+def get_commit_suggestions(modified_files, modified_folders):
     commit_message = []
-    for action, changes in file_modifications.items():
-        if changes:
-            keywords = commit_keywords.get(action, [])
-            commit_message.append(f"{', '.join(keywords)}: {', '.join(changes)}")
+    if 'configs' in modified_files or 'config' in modified_folders:
+        commit_message.append("update configs")
+    if 'detectron2_pedia' in modified_files or 'detectron2_pedia' in modified_folders:
+        commit_message.append("update detectron2")
+    if 'siamese_pedia' in modified_files or 'siamese_pedia' in modified_folders:
+        commit_message.append("update siamese")
 
     return commit_message
 
@@ -62,14 +40,14 @@ def print_commit_info():
 
         folders = get_folders_for_files(modified_files)
 
-        print("\nFolders these files belong to:", file=sys.stderr)
+        print("Folders these files belong to:", file=sys.stderr)
         for folder in folders:
             print(f"- {folder}", file=sys.stderr)
 
         # 生成高层次的 commit message 建议
-        commit_suggestions = get_commit_suggestions(modified_files)
+        commit_suggestions = get_commit_suggestions([os.path.basename(f) for f in modified_files], folders)
         if commit_suggestions:
-            print("\nCommit message suggestions:", file=sys.stderr)
+            print("Commit message suggestions:", file=sys.stderr)
             for suggestion in commit_suggestions:
                 print(f"- {suggestion}", file=sys.stderr)
         else:

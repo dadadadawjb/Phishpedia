@@ -1,5 +1,0 @@
-{
-  "hooks": {
-    "pre-commit": "python3 phishpedia/scripts/pre_commit_hook.py"
-  }
-}

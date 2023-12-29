@@ -4,5 +4,7 @@
 build/
 *.egg-info/
 __pycache__/
+node_modules/
+package-lock.json
 
 phishpedia/datasets/expand_targetlist
