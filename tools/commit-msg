@@ -1,0 +1,22 @@
+#!/bin/bash
+
+previous_commit_hash=$(git rev-parse HEAD)
+
+previous_commit_message=$(git log --format=%B -n 1 $previous_commit_hash)
+
+current_commit_message=$(cat "$1")
+
+echo $current_commit_message
+echo $previous_commit_message
+
+if [ "$current_commit_message" == "$previous_commit_message" ]
+then
+    echo "当前提交的 message 与上一次提交的 message 相同，请尝试 rebase 或 revert。"
+    read -p "你已经检查过了吗？(y/n) " answer < /dev/tty
+    if [ "$answer" != "y" ]
+    then
+        exit 1
+    fi
+fi
+
+exit 0

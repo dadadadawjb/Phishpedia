@@ -1,0 +1,11 @@
+#!/bin/bash
+exec < /dev/tty
+python3 $(dirname $0)/pre-commit.py
+if (( $? != 0 )); then
+    read -p "你已经检查过了吗？(y/n) " answer
+    if [[ $answer != 'y' && $answer != 'Y' ]]; then
+        exit 1
+    fi
+fi
+
+exit 0
